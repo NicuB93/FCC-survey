@@ -12,13 +12,14 @@ const FormSubComponentAge: FC = () => {
       name="age"
       control={control}
       defaultValue={''}
+      rules={{ pattern: /^[0-9]{1,2}$/ }}
       render={({ field }) => (
         <TextField
           {...field}
           label="Age (optional)"
           variant="standard"
           error={!!errors.age}
-          helperText={errors.age ? 'Age must be a number, less than 100' : ''}
+          helperText={errors.age ? 'Age must be a number' : ''}
         />
       )}
     />

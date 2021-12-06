@@ -7,11 +7,13 @@ const FormSubComponentEmail: FC = () => {
     control,
     formState: { errors },
   } = useFormContext();
+
   return (
     <Controller
       name="email"
       control={control}
       defaultValue={''}
+      rules={{ required: true, pattern: /^[^\s@]+@[^\s@]+\.[^\s@]+$/ }}
       render={({ field }) => (
         <TextField
           {...field}
@@ -19,7 +21,7 @@ const FormSubComponentEmail: FC = () => {
           type="email"
           variant="standard"
           error={!!errors.email}
-          helperText={errors.email ? errors.email?.message : ''}
+          helperText={errors.email ? 'Please enter a valid email' : ''}
         />
       )}
     />

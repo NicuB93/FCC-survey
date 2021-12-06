@@ -1,60 +1,85 @@
 import React, { useState, useEffect } from 'react';
 import { useForm, SubmitHandler, FormProvider } from 'react-hook-form';
-// import { yupResolver } from '@hookform/resolvers/yup';
-import * as yup from 'yup';
-// import { ReactForm, Flex } from './styled';
+// import * as yup from 'yup';
+import { Flex } from './styled';
+import { Button } from '@mui/material';
 import FormSubComponentName from '../../src/components/FormSubComponentName';
 import FormSubComponentAge from '../../src/components/FormSubComponentAge';
 import FormSubComponentEmail from '../../src/components/FormSubComponentEmail';
 
-const { yupResolver } = require('@hookform/resolvers/yup');
+// const { yupResolver } = require('@hookform/resolvers/yup');
 
 type FormValues = {
   name: string;
   age: string;
   email: string;
-  currentRole: string;
-  recommend: string;
-  favoriteFeature: string;
-  comments: string;
+  // currentRole: string;
+  // recommend: string;
+  // favoriteFeature: string;
+  // comments: string;
 };
 
-const schema = yup.object().shape({
-  name: yup
-    .string()
-    .matches(/^[aA-zZ\s]+$/, 'Please enter valid name')
-    .max(40)
-    .required(),
-  age: yup.number().max(100).required(),
-  email: yup.string().email().required(),
-});
+// const schema = yup.object().shape({
+//   name: yup
+//     .string()
+//     .matches(/^[aA-zZ\s]+$/, 'Please enter valid name')
+//     .max(40),
+//   age: yup.string(),
+//   email: yup.string().email(),
+// });
 
 const Form = () => {
   const methods = useForm<FormValues>({
-    resolver: yupResolver(schema),
+    // resolver: yupResolver(schema),
     mode: 'all',
+    reValidateMode: 'onChange',
   });
 
-  console.log('watch variable name', methods.watch('name'));
-  const formSubmitHandler: SubmitHandler<FormValues> = (data: FormValues) => {
-    +data.age;
-    console.log(`form data is`, data);
+  const [currentStep, setCurrentStep] = useState(0);
+
+  const nextStep = () => {
+    setCurrentStep(currentStep + 1);
   };
 
-  const validHandler = (value: number) => console.log(value);
+  console.log('name: ', methods.watch('name'));
+  console.log(methods.formState.isValid);
+
+  const formSubmitHandler: SubmitHandler<FormValues> = (data: FormValues) => {
+    console.log(`form data is`, data);
+  };
 
   return (
     <main>
       <FormProvider {...methods}>
-        <form onSubmit={methods.handleSubmit(formSubmitHandler)}>
-          <FormSubComponentName isValidHandler={validHandler} />
-          <FormSubComponentAge />
-          <FormSubComponentEmail />
-          <input type="submit" value="Submit" />
-
+        <Flex>
+          {currentStep === 0 && (
+            <>
+              <h2>
+                By following a few simple steps you will successfully complete
+                the survey form
+              </h2>
+              <FormSubComponentName />
+              <FormSubComponentAge />
+            </>
+          )}
+          {currentStep === 1 && <FormSubComponentEmail />}
+          {currentStep === 5 ? (
+            <Button onClick={methods.handleSubmit(formSubmitHandler)}>
+              Submit
+            </Button>
+          ) : (
+            <Button
+              variant="contained"
+              color="warning"
+              disabled={!methods.formState.isValid}
+              onClick={nextStep}
+            >
+              Next
+            </Button>
+          )}
           <br />
           <br />
-        </form>
+        </Flex>
       </FormProvider>
     </main>
   );
