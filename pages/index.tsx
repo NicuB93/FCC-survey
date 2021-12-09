@@ -1,22 +1,23 @@
 import type { NextPage } from 'next';
-import styles from '../styles/Home.module.css';
-import Box from '@mui/material/Box';
-import Form from './Form';
-import { createStyles, makeStyles, Theme } from '@mui/material/styles';
+import Form from '../src/components/Form';
 import React from 'react';
+import styled from '@emotion/styled';
+import Typography from '@mui/material/Typography';
 
-const useStyles = makeStyles((theme: Theme) => ({
-  background: {
-    backgroundColor: 'blue',
-  },
-}));
+const H4 = styled(Typography)`
+  text-align: center;
+  margin: 0;
+  padding: 1rem 0;
+`;
 
 const Home: NextPage = () => {
-  const classes = useStyles();
   return (
-    <Box className={classes.background}>
+    <div>
+      <H4 variant="h4" color="secondary">
+        freeCodeCamp Survey Form
+      </H4>
       <Form />
-    </Box>
+    </div>
   );
 };
 
